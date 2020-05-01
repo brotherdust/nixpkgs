@@ -1127,6 +1127,12 @@
     githubId = 5525646;
     name = "Brice Waegeneire";
   };
+  brotherdust = {
+    email = "brotherdust@gmail.com";
+    github = "brotherdust";
+    githubId = 10413016;
+    name = "Jarad Olson";
+  };
   bstrik = {
     email = "dutchman55@gmx.com";
     github = "bstrik";
