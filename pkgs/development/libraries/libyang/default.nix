@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_CACHE=1"
     "-DENABLE_LATEST_REVISIONS=1"
     "-DENABLE_BUILD_TESTS=ON"
+    "-DENABLE_LYD_PRIV=ON"
   ];
 
   meta = with stdenv.lib; {

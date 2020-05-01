@@ -15984,6 +15984,8 @@ in
 
   quagga = callPackage ../servers/quagga { };
 
+  frr = callPackage ../servers/frr { };  
+
   rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
     elixir = elixir_1_8;
