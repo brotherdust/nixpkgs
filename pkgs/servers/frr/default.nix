@@ -1,20 +1,16 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
 , json_c
 , python3
-
 , readline
-# , pcre
-# , linux-pam
-# , libbpf
 , c-ares
 , perl
 , libcap
-# , linuxHeaders
 , pcapc
 , libnl
 , libyang
 , yacc
 , flex
+, sqlite
 }:
 
 stdenv.mkDerivation rec {
@@ -33,9 +29,6 @@ stdenv.mkDerivation rec {
     json_c
     python3
     readline
-    # pcre
-    # linux-pam
-    # libbpf
     c-ares
     libcap
     pcapc
@@ -43,29 +36,27 @@ stdenv.mkDerivation rec {
     perl
     yacc
     flex
+    sqlite
    ];
-  #  ++ stdenv.lib.optionals stdenv.isLinux [ linuxHeaders ];
 
   nativeBuildInputs = [ pkgconfig libyang ];
 
-  # preConfigure = "LD=$CC";
-
   configureFlags = [
-    # "--prefix=/usr"
     # "--enable-exampledir=/usr/share/doc/frr/examples"
-    "--localstatedir=/var/run/frr"
-    "--sbindir=/usr/lib/frr"
-    "--sysconfdir=/etc/frr"
     "--disable-doc"
     # "--enable-systemd"
     "--enable-multipath=64"
-    # "--enable-config-rollbacks"
+    "--enable-config-rollbacks"
     # "--with-libpam"
     # "--enable-pcreposix"
     "--enable-user=frr"
     "--enable-group=frr"
     "--enable-vty-group=frrvty"
   ];
+
+  preConfigure = ''
+    configureFlags="$configureFlags --sbindir=$out/usr/lib/frr --sysconfdir=$out/etc/frr --localstatedir=$out/var/run/frr"
+  '';
 
   enableParallelBuilding = true;
 
