@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, file
 , json_c
 , python3
 , readline
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ 
     autoreconfHook
+    file
     json_c
     python3
     readline
@@ -42,8 +43,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig libyang ];
 
   configureFlags = [
-    # "--enable-exampledir=/usr/share/doc/frr/examples"
     "--disable-doc"
+    "--sysconfdir=/etc/frr"
+    "--localstatedir=/var/run/frr"
     # "--enable-systemd"
     "--enable-multipath=64"
     "--enable-config-rollbacks"
@@ -55,10 +57,12 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    configureFlags="$configureFlags --sbindir=$out/usr/lib/frr --sysconfdir=$out/etc/frr --localstatedir=$out/var/run/frr"
+    substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
+    configureFlags="$configureFlags --sbindir=$out/usr/lib/frr --enable-exampledir=$out/usr/share/doc/frr/examples"
   '';
 
   enableParallelBuilding = true;
+  # dontInstall = true;
 
   meta = with stdenv.lib; {
     description = "FRRouting";
